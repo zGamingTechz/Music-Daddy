@@ -13,4 +13,10 @@ async def on_ready():
     print(f"We Have Logged In As {bot.user}")
 
 
+@bot.event
+async def on_message(message):
+    if bot.user in message.mentions:
+        await message.channel.send("Hello?")
+
+
 bot.run(token)
