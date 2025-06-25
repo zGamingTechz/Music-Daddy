@@ -10,7 +10,7 @@ TO:DO
 1. check if already in a vc (say some' like Daddy's busy) -done
 2. auto join on play -done
 3. auto leave if VC empty for 2 min
-4. queue feature
+4. queue feature -done
 5. reset queue on leave
 6. skip feature
 7. priority based playing? (user priority)
@@ -53,6 +53,7 @@ async def join(ctx):
 @bot.command()
 async def leave(ctx):
     if ctx.voice_client:
+        queue.clear()
         await ctx.voice_client.disconnect()
         await ctx.send("👋 Daddy has left the VC.")
     else:
