@@ -32,4 +32,14 @@ async def join(ctx):
         await ctx.send("You need to be in a voice channel, dumbo.")
 
 
+# LEave command
+@bot.command()
+async def leave(ctx):
+    if ctx.voice_client:
+        await ctx.voice_client.disconnect()
+        await ctx.send("👋 Daddy has left the VC.")
+    else:
+        await ctx.send("I'm not in a VC, dumbo.")
+
+
 bot.run(token)
