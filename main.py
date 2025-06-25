@@ -20,6 +20,7 @@ TO:DO
 
 bot = commands.Bot(command_prefix="&", intents=discord.Intents.all(), help_command=None)
 queue = []
+current_song = None
 
 
 # Login Status & On Ready
@@ -106,6 +107,10 @@ async def play_next(ctx):
         return
 
     info = queue.pop(0)
+
+    global current_song
+    current_song = info
+
     stream_url = info['url']
     title = info['title']
     vc = ctx.voice_client
@@ -131,6 +136,25 @@ async def play_next(ctx):
         after=after_play
     )
     await ctx.send(f"▶️ Now playing: **{title}**")
+
+
+# Show queue
+@bot.command(name="queue", aliases=["q", "songs"])
+async def queue_(ctx):
+    if not current_song and not queue:
+        await ctx.send("📭 Queue is empty, dumbo.")
+        return
+
+    embed = discord.Embed(title="🎶 Music Daddy's Queue", color=discord.Color.purple())
+
+    if current_song:
+        embed.add_field(name="▶️ Now Playing", value=f"**{current_song['title']}**", inline=False)
+
+    if queue:
+        upcoming = "\n".join([f"{idx + 1}. {song['title']}" for idx, song in enumerate(queue)])
+        embed.add_field(name="⏭️ Up Next", value=upcoming, inline=False)
+
+    await ctx.send(embed=embed)
 
 
 bot.run(token)
