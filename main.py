@@ -165,7 +165,10 @@ async def play_next(ctx):
         ),
         after=after_play
     )
-    await ctx.send(f"▶️ Now playing: **{title}**")
+
+    text_channel = guild_text_channels.get(ctx.guild.id)
+    if text_channel:
+        await text_channel.send(f"▶️ Now playing: **{title}**")
 
 
 # Show queue
