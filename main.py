@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from bot_token import token
 import yt_dlp
+import asyncio
 
 
 '''
@@ -18,6 +19,7 @@ TO:DO
 
 
 bot = commands.Bot(command_prefix="&", intents=discord.Intents.all(), help_command=None)
+queue = []
 
 
 # Login Status & On Ready
@@ -100,6 +102,38 @@ async def play(ctx, *, query):
         )
     )
     await ctx.send(f"▶️ Now playing: **{info['title']}**")
+
+
+async def play_next(ctx):
+    if not queue:
+        return
+
+    info = queue.pop(0)
+    stream_url = info['url']
+    title = info['title']
+    vc = ctx.voice_client
+
+    if not vc:
+        return
+
+    def after_play(error):
+        if error:
+            print(f"❌ Error while playing: {error}")
+        fut = asyncio.run_coroutine_threadsafe(play_next(ctx), bot.loop)
+        try:
+            fut.result()
+        except Exception as e:
+            print(f"❌ Error in after callback: {e}")
+
+    vc.play(
+        discord.FFmpegPCMAudio(
+            stream_url,
+            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -nostdin",
+            options="-vn -loglevel panic"
+        ),
+        after=after_play
+    )
+    await ctx.send(f"▶️ Now playing: **{title}**")
 
 
 bot.run(token)
