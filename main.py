@@ -159,7 +159,7 @@ async def queue_(ctx):
 
 
 # Skip command
-@bot.command()
+@bot.command(aliases=["Skip", "s", "SKIP"])
 async def skip(ctx):
     vc = ctx.voice_client
 
