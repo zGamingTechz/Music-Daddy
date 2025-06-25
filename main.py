@@ -67,14 +67,8 @@ async def play(ctx, *, query):
         await join(ctx)
         vc = ctx.voice_client
 
-    # If user not in VC and bot also isn't, bail out
     if not vc:
         await ctx.send("You must be in a VC, dumbo.")
-        return
-
-    # Check if already playing something
-    if vc.is_playing():
-        await ctx.send("Daddy's busy playing something already 🎶")
         return
 
     is_url = query.startswith("http://") or query.startswith("https://")
@@ -92,16 +86,19 @@ async def play(ctx, *, query):
         info = ydl.extract_info(query, download=False)
         if 'entries' in info:
             info = info['entries'][0]
-        stream_url = info['url']
 
-    vc.play(
-        discord.FFmpegPCMAudio(
-            stream_url,
-            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -nostdin",
-            options="-vn -loglevel panic"
-        )
-    )
-    await ctx.send(f"▶️ Now playing: **{info['title']}**")
+    song = {
+        'url': info['url'],
+        'title': info['title']
+    }
+
+    # If nothing playing and queue empty → play instantly
+    if not vc.is_playing() and not queue:
+        queue.append(song)
+        await play_next(ctx)
+    else:
+        queue.append(song)
+        await ctx.send(f"➕ Added to queue: **{info['title']}**")
 
 
 async def play_next(ctx):
