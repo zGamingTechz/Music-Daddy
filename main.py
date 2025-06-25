@@ -21,4 +21,15 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+# Commands
+# Join command
+@bot.command()
+async def join(ctx):
+    if ctx.author.voice:
+        await ctx.author.voice.channel.connect()
+        await ctx.send("🎧 Daddy has joined your VC!")
+    else:
+        await ctx.send("You need to be in a voice channel, dumbo.")
+
+
 bot.run(token)
