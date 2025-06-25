@@ -159,6 +159,7 @@ async def queue_(ctx):
 
 
 # Skip command
+@commands.cooldown(1, 10, commands.BucketType.guild)
 @bot.command(aliases=["Skip", "s", "SKIP"])
 async def skip(ctx):
     vc = ctx.voice_client
