@@ -261,4 +261,27 @@ async def stop(ctx):
     await ctx.send("⏹️ Daddy stopped the music. Hmph!")
 
 
+# Help command
+@bot.command(aliases=["Help", "HELP", "commands", "Commands"])
+async def help(ctx):
+    embed = discord.Embed(
+        title="🎧 Music Daddy's Command Guide",
+        description="Here's what daddy can do for you",
+        color=discord.Color.magenta()
+    )
+
+    embed.add_field(name="▶️ `&play [song/url]`", value="Plays a song or adds it to the queue.", inline=False)
+    embed.add_field(name="📃 `&queue` / `&q`", value="Shows the current queue and what's playing.", inline=False)
+    embed.add_field(name="⏸️ `&pause`", value="Pauses the music.", inline=True)
+    embed.add_field(name="▶️ `&resume`", value="Resumes the music.", inline=True)
+    embed.add_field(name="⏭️ `&skip`", value="Skips the current song.", inline=False)
+    embed.add_field(name="⏹️ `&stop`", value="Stops music and clears the queue, but stays in VC.", inline=False)
+    embed.add_field(name="🎧 `&join`", value="Daddy joins your VC.", inline=True)
+    embed.add_field(name="👋 `&leave`", value="Daddy leaves the VC and resets the queue.", inline=True)
+
+    embed.set_footer(text="💡 Pro tip: Use &skip if Daddy's stuck!")
+
+    await ctx.send(embed=embed)
+
+
 bot.run(token)
