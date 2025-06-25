@@ -227,4 +227,21 @@ async def pause(ctx):
     await ctx.send("⏸️ Daddy paused the music.")
 
 
+# Resume command
+@bot.command(aliases=["Resume", "RESUME", "continue", "Continue"])
+async def resume(ctx):
+    vc = ctx.voice_client
+
+    if not vc or not vc.is_connected():
+        await ctx.send("I'm not even in a VC, dumbo.")
+        return
+
+    if not vc.is_paused():
+        await ctx.send("Music isn't paused, dumbo.")
+        return
+
+    vc.resume()
+    await ctx.send("▶️ Daddy resumed the music.")
+
+
 bot.run(token)
