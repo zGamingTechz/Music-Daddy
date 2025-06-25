@@ -75,7 +75,7 @@ async def play(ctx, url):
         return
 
     ydl_opts = {
-        'format': 'bestaudio/best',
+        'format': 'bestaudio[ext=m4a]/bestaudio/best',
         'quiet': True,
         'noplaylist': True
     }
@@ -84,7 +84,7 @@ async def play(ctx, url):
         info = ydl.extract_info(url, download=False)
         stream_url = info['url']
 
-    vc.play(discord.FFmpegPCMAudio(stream_url))
+    vc.play(discord.FFmpegPCMAudio(stream_url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"))
     await ctx.send(f"▶️ Now playing: **{info['title']}**")
 
 
