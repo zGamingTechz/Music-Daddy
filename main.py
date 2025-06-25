@@ -38,6 +38,31 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+# Leave in 2 mins if VC empty
+@bot.event
+async def on_voice_state_update(member, before, after):
+    if member.bot:
+        return
+
+    # If the user left a VC or switched VCs
+    if before.channel != after.channel and before.channel is not None:
+        vc = before.channel
+        bot_in_channel = bot.user in vc.members
+
+        if bot_in_channel:
+            await asyncio.sleep(120)  # 2 minute timeout
+
+            # Re-check members after timeout
+            vc = before.channel
+            members = [m for m in vc.members if not m.bot]
+
+            if len(members) == 0:
+                vc_client = discord.utils.get(bot.voice_clients, guild=vc.guild)
+                if vc_client and vc_client.channel == vc:
+                    await vc_client.disconnect()
+                    print("💤 VC was empty for 2 minutes. Daddy left to get milk..")
+
+
 # Commands
 # Join command
 @bot.command()
