@@ -6,13 +6,14 @@ import yt_dlp
 
 '''
 TO:DO
-1. check if already in a vc (say some' like Daddy's busy)
-2. auto join on play
+1. check if already in a vc (say some' like Daddy's busy) -done
+2. auto join on play -done
 3. auto leave if VC empty for 2 min
 4. queue feature
 5. reset queue on leave
 6. skip feature
 7. priority based playing? (user priority)
+8. search feature -done
 '''
 
 
@@ -94,7 +95,8 @@ async def play(ctx, *, query):
     vc.play(
         discord.FFmpegPCMAudio(
             stream_url,
-            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -nostdin",
+            options="-vn -loglevel panic"
         )
     )
     await ctx.send(f"▶️ Now playing: **{info['title']}**")
