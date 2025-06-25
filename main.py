@@ -18,5 +18,7 @@ async def on_message(message):
     if bot.user in message.mentions:
         await message.channel.send("Hello?")
 
+    await bot.process_commands(message)
+
 
 bot.run(token)
