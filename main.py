@@ -34,7 +34,7 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     if bot.user in message.mentions:
-        await message.channel.send("Hello?")
+        await message.channel.send("Hello? Use `&help`")
 
     await bot.process_commands(message)
 
