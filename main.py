@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from bot_token import token
+import yt_dlp
 
 
 '''
@@ -52,6 +53,39 @@ async def leave(ctx):
         await ctx.send("👋 Daddy has left the VC.")
     else:
         await ctx.send("I'm not in a VC, dumbo.")
+
+
+# Play command
+@bot.command()
+async def play(ctx, url):
+    vc = ctx.voice_client
+
+    if not vc:
+        await join(ctx)
+        vc = ctx.voice_client
+
+    # If user not in VC and bot also isn't, bail out
+    if not vc:
+        await ctx.send("You must be in a VC, dumbo.")
+        return
+
+    # Check if already playing something
+    if vc.is_playing():
+        await ctx.send("Daddy's busy playing something already 🎶")
+        return
+
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'quiet': True,
+        'noplaylist': True
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+        stream_url = info['url']
+
+    vc.play(discord.FFmpegPCMAudio(stream_url))
+    await ctx.send(f"▶️ Now playing: **{info['title']}**")
 
 
 bot.run(token)
