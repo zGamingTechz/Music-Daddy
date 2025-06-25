@@ -50,7 +50,7 @@ async def join(ctx):
 
 
 # LEave command
-@bot.command()
+@bot.command(aliases=["Leave", "LEAVE", "exit", "Exit"])
 async def leave(ctx):
     if ctx.voice_client:
         queue.clear()
