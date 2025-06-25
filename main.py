@@ -21,6 +21,7 @@ TO:DO
 bot = commands.Bot(command_prefix="&", intents=discord.Intents.all(), help_command=None)
 queue = []
 current_song = None
+guild_text_channels = {}
 
 
 # Login Status & On Ready
@@ -59,8 +60,12 @@ async def on_voice_state_update(member, before, after):
             if len(members) == 0:
                 vc_client = discord.utils.get(bot.voice_clients, guild=vc.guild)
                 if vc_client and vc_client.channel == vc:
+                    text_channel = guild_text_channels.get(vc.guild.id)
+                    if text_channel:
+                        await text_channel.send("💤 VC was empty for 2 minutes. Daddy left to get milk...")
+                        guild_text_channels.pop(vc.guild.id, None)
+
                     await vc_client.disconnect()
-                    print("💤 VC was empty for 2 minutes. Daddy left to get milk..")
 
 
 # Commands
@@ -68,6 +73,7 @@ async def on_voice_state_update(member, before, after):
 @bot.command()
 async def join(ctx):
     if ctx.author.voice:
+        guild_text_channels[ctx.guild.id] = ctx.channel
         await ctx.author.voice.channel.connect()
         await ctx.send("🎧 Daddy has joined your VC!")
     else:
@@ -79,6 +85,7 @@ async def join(ctx):
 async def leave(ctx):
     if ctx.voice_client:
         queue.clear()
+        guild_text_channels.pop(ctx.guild.id, None)
         await ctx.voice_client.disconnect()
         await ctx.send("👋 Daddy has left the VC.")
     else:
@@ -89,6 +96,7 @@ async def leave(ctx):
 @bot.command()
 async def play(ctx, *, query):
     vc = ctx.voice_client
+    guild_text_channels[ctx.guild.id] = ctx.channel
 
     if not vc:
         await join(ctx)
