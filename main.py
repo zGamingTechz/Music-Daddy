@@ -158,4 +158,21 @@ async def queue_(ctx):
     await ctx.send(embed=embed)
 
 
+# Skip command
+@bot.command()
+async def skip(ctx):
+    vc = ctx.voice_client
+
+    if not vc or not vc.is_connected():
+        await ctx.send("I'm not even in a VC, dumbo.")
+        return
+
+    if not vc.is_playing():
+        await ctx.send("Nothing's playing right now, dumbo.")
+        return
+
+    vc.stop()
+    await ctx.send("⏭️ Skipped! Playing the next track...")
+
+
 bot.run(token)
