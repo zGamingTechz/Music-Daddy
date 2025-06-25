@@ -3,6 +3,18 @@ from discord.ext import commands
 from bot_token import token
 
 
+'''
+TO:DO
+1. check if already in a vc (say some' like Daddy's busy)
+2. auto join on play
+3. auto leave if VC empty for 2 min
+4. queue feature
+5. reset queue on leave
+6. skip feature
+7. priority based playing? (user priority)
+'''
+
+
 bot = commands.Bot(command_prefix="&", intents=discord.Intents.all(), help_command=None)
 
 
