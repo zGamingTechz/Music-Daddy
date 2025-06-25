@@ -102,10 +102,6 @@ async def play(ctx, *, query):
         await join(ctx)
         vc = ctx.voice_client
 
-    if not vc:
-        await ctx.send("You must be in a VC, dumbo.")
-        return
-
     is_url = query.startswith("http://") or query.startswith("https://")
 
     ydl_opts = {
@@ -212,6 +208,23 @@ async def skip(ctx):
 
     vc.stop()
     await ctx.send("⏭️ Skipped! Playing the next track...")
+
+
+# Pause command
+@bot.command(aliases=["Pause", "PAUSE", "hold", "Hold"])
+async def pause(ctx):
+    vc = ctx.voice_client
+
+    if not vc or not vc.is_connected():
+        await ctx.send("I'm not even in a VC, dumbo.")
+        return
+
+    if not vc.is_playing():
+        await ctx.send("Nothing's playing right now to pause, dumbo.")
+        return
+
+    vc.pause()
+    await ctx.send("⏸️ Daddy paused the music.")
 
 
 bot.run(token)
