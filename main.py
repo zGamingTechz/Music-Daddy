@@ -57,7 +57,7 @@ async def leave(ctx):
 
 # Play command
 @bot.command()
-async def play(ctx, url):
+async def play(ctx, *, query):
     vc = ctx.voice_client
 
     if not vc:
@@ -74,17 +74,29 @@ async def play(ctx, url):
         await ctx.send("Daddy's busy playing something already 🎶")
         return
 
+    is_url = query.startswith("http://") or query.startswith("https://")
+
     ydl_opts = {
         'format': 'bestaudio[ext=m4a]/bestaudio/best',
         'quiet': True,
         'noplaylist': True
     }
 
+    if not is_url:
+        ydl_opts['default_search'] = 'ytsearch'
+
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
+        info = ydl.extract_info(query, download=False)
+        if 'entries' in info:
+            info = info['entries'][0]
         stream_url = info['url']
 
-    vc.play(discord.FFmpegPCMAudio(stream_url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"))
+    vc.play(
+        discord.FFmpegPCMAudio(
+            stream_url,
+            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+        )
+    )
     await ctx.send(f"▶️ Now playing: **{info['title']}**")
 
 
