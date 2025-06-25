@@ -171,6 +171,11 @@ async def skip(ctx):
         await ctx.send("Nothing's playing right now, dumbo.")
         return
 
+    if not queue:
+        vc.stop()
+        await ctx.send("⏭️ Skipped! The queue is empty...")
+        return
+
     vc.stop()
     await ctx.send("⏭️ Skipped! Playing the next track...")
 
