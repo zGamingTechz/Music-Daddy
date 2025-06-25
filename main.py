@@ -247,4 +247,18 @@ async def resume(ctx):
     await ctx.send("▶️ Daddy resumed the music.")
 
 
+# Stop command
+@bot.command(aliases=["Stop", "STOP", "end", "End"])
+async def stop(ctx):
+    vc = ctx.voice_client
+
+    if not vc or not vc.is_connected():
+        await ctx.send("I'm not even in a VC, dumbo.")
+        return
+
+    queue.clear()
+    vc.stop()
+    await ctx.send("⏹️ Daddy stopped the music. Hmph!")
+
+
 bot.run(token)
