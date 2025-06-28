@@ -1,0 +1,6 @@
+discord~=2.3.2
+discord.py~=2.5.2
+yt-dlp~=2025.6.9
+PyNACl
+
+# Also download and install ffmpeg (required)
