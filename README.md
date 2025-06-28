@@ -19,7 +19,7 @@
 - Python 3.9+
 - [FFmpeg](https://ffmpeg.org/download.html) installed and added to PATH
 - Required Python libraries:
-  ```bash
+```
   pip install -r requirements.txt
 ```
 
