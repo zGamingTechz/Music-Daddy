@@ -28,6 +28,7 @@
 ```
 discord.py
 yt_dlp
+PyNACl
 ```
 
 ## 🔑 Setup
