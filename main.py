@@ -284,4 +284,9 @@ async def help(ctx):
     await ctx.send(embed=embed)
 
 
+# Info
+@bot.command()
+async def info(ctx):
+    await ctx.send("Created by Gaming Tech")
+
 bot.run(token)
